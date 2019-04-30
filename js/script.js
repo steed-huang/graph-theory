@@ -31,6 +31,13 @@ class Graph {
       }
     }
   }
+  print() {
+    let keys = this.adjList.keys();
+    for (var key of keys) {
+      var val = this.adjList.get(key)[1];
+      console.log(key + ": " + val);
+    }
+  }
 }
 
 function drawText(str, x, y) {
@@ -61,12 +68,20 @@ function getRandom(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function getWeight(n1, n2) {
+  let x1 = graph.adjList.get(n1)[0].x;
+  let y1 = graph.adjList.get(n1)[0].y;
+  let x2 = graph.adjList.get(n2)[0].x;
+  let y2 = graph.adjList.get(n2)[0].y;
+
+  return Number(Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2).toFixed(0));
+}
+
 function generateGraph(num, edges) {
-  let graph = new Graph();
+  window.graph = new Graph();
   let vertName = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   let edgeAcc = 0;
 
-  // first node
   graph.addVertex("A", getRandom(100, 500), getRandom(100, 500));
 
   for (let i = 1; i < num; i++) {
@@ -75,7 +90,10 @@ function generateGraph(num, edges) {
     graph.addVertex(vertName.charAt(i), x, y);
 
     let n = getRandom(0, i - 1);
-    graph.addEdge([vertName.charAt(i), vertName.charAt(n)], 1);
+    let c1 = vertName.charAt(i);
+    let c2 = vertName.charAt(n);
+
+    graph.addEdge([c1, c2], getWeight(c1, c2));
     edgeAcc++;
   }
 
@@ -95,10 +113,12 @@ function generateGraph(num, edges) {
             }
         }
       }
-      graph.addEdge([vertName.charAt(n1), vertName.charAt(n2)], 1);
+      c1 = vertName.charAt(n2);
+      c2 = vertName.charAt(n1);
+      graph.addEdge([c1, c2], getWeight(c1, c2));
     }
   }
 
-  console.log(graph.adjList);
+  graph.print();
   graph.draw();
 }
