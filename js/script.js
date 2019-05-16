@@ -98,27 +98,32 @@ function generateGraph(num, edges) {
   }
 
   // there is definitely a better way to do this
-  // this breaks most of the time if edges is larger than num | please fix
-  var n1, n2;
-  if (edgeAcc < edges) {
-    for (let i = 0; i < edges - edgeAcc; i++) {
-      let isNew = false;
-      while (isNew == false) {
-        n1 = getRandom(0, edgeAcc);
-        n2 = getRandom(0, edgeAcc);
-        if (n1 != n2) {
-          for (let z = 0; z < graph.adjList.get(vertName.charAt(n1)).length; z++)
-            if (graph.adjList.get(vertName.charAt(n1))[1][i][0] != vertName.charAt(n2)) {
-              isNew = true;
-            }
+  let n1, n2;
+  let newAcc = 0;
+  while (edgeAcc < (edgeAcc - 1) * edgeAcc * 0.5) {
+    let isNew = false;
+    while (isNew == false) {
+      n1 = getRandom(0, num - 1);
+      n2 = getRandom(0, num - 1);
+      if (n1 != n2) {
+        for (let i = 0; i < graph.adjList.get(vertName.charAt(n1))[1].length; i++) {
+          if (graph.adjList.get(vertName.charAt(n1))[1][i][0] == vertName.charAt(n2)) {
+            break;
+          }
+          if (i == graph.adjList.get(vertName.charAt(n1))[1].length - 1) {
+            isNew = true;
+          }
         }
       }
-      c1 = vertName.charAt(n2);
-      c2 = vertName.charAt(n1);
-      graph.addEdge([c1, c2], getWeight(c1, c2));
+    }
+    c1 = vertName.charAt(n2);
+    c2 = vertName.charAt(n1);
+    graph.addEdge([c1, c2], getWeight(c1, c2));
+    newAcc += 1;
+    if (edgeAcc + newAcc == edges) {
+      break;
     }
   }
-
   graph.print();
   graph.draw();
 }
