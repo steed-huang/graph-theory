@@ -33,10 +33,46 @@ class Graph {
   }
   print() {
     let keys = this.adjList.keys();
-    for (var key of keys) {
-      var val = this.adjList.get(key)[1];
+    for (let key of keys) {
+      let val = this.adjList.get(key)[1];
       console.log(key + ": " + val);
     }
+  }
+}
+
+// priority queue for dijkstra's algorithm
+class priorityQueue {
+  constructor() {
+    this.queue = [];
+  }
+  enqueue(node, weight) {
+    if (this.empty()) {
+      this.queue.push([node, weight]);
+    } else {
+      let added = false;
+      for (let i = 0; i < this.queue.length; i++) {
+        if (weight < this.queue[i][1]) {
+          this.queue.splice(i, 0, [node, weight]);
+          added = true;
+          break;
+        }
+      }
+      if (added == false) {
+        this.queue.push([node, weight]);
+      }
+    }
+  }
+  dequeue() {
+    let val = this.queue.shift();
+    return val;
+  }
+  empty() {
+    if (this.queue.length == 0) {
+      return true;
+    }
+  }
+  print() {
+    console.log(this.queue);
   }
 }
 
@@ -82,11 +118,11 @@ function generateGraph(num, edges) {
   let vertName = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   let edgeAcc = 0;
 
-  graph.addVertex("A", getRandom(100, 500), getRandom(100, 500));
+  graph.addVertex("A", getRandom(5, 595), getRandom(5, 595));
 
   for (let i = 1; i < num; i++) {
-    let x = getRandom(10, 590);
-    let y = getRandom(10, 590);
+    let x = getRandom(5, 595);
+    let y = getRandom(5, 595);
     graph.addVertex(vertName.charAt(i), x, y);
 
     let n = getRandom(0, i - 1);
@@ -127,3 +163,5 @@ function generateGraph(num, edges) {
   graph.print();
   graph.draw();
 }
+
+function dijkstra() {}
