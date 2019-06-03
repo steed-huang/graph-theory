@@ -7,7 +7,7 @@ function init() {
   c = canvas.getContext("2d");
 }
 
-// directed, weighted graph implemented with adjacency list
+// undirected, weighted graph implemented with adjacency list
 class Graph {
   constructor() {
     this.adjList = new Map();
