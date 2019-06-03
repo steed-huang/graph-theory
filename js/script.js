@@ -162,6 +162,36 @@ function generateGraph(num, edges) {
   }
   graph.print();
   graph.draw();
+
+  dijkstra("A", vertName.charAt(num));
 }
 
-function dijkstra() {}
+function dijkstra(startNode) {
+  let keys = graph.adjList.keys();
+  let dist = {}; // distance from startNode to each node
+  let prev = {}; // previous node in shortest path
+  let pq = new priorityQueue();
+
+  dist[startNode] = 0;
+  pq.enqueue(startNode, 0);
+
+  for (let key of keys) {
+    if (key !== startNode) dist[key] = Infinity;
+    prev[key] = null;
+  }
+
+  while (!pq.empty()) {
+    let currNode = pq.dequeue();
+    for (let neighborNode of graph.adjList.get(currNode[0])[1]) {
+      let alt = dist[currNode[0]] + neighborNode[1];
+      if (alt < dist[neighborNode[0]]) {
+        dist[neighborNode[0]] = alt;
+        prev[neighborNode[0]] = currNode[0];
+        pq.enqueue(neighborNode[0], dist[neighborNode[1]]);
+      }
+    }
+  }
+
+  console.log(prev);
+  console.log(dist);
+}
